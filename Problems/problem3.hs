@@ -2,16 +2,12 @@ import System.Random
 import Data.List (permutations, minimumBy, foldl')
 import Data.Function (on)
 
--- Тип для представлення міст у задачі комівояджера
 type City = (Int, Int)
 
--- Тип для представлення особини (шляху) у генетичному алгоритмі
 type Individual = [City]
 
--- Тип для представлення популяції особин
 type Population = [Individual]
 
--- Тип для представлення конфігурації генетичного алгоритму
 data GAConfig = GAConfig
   { populationSize :: Int
   , generations :: Int
@@ -19,25 +15,20 @@ data GAConfig = GAConfig
   , mutationRate :: Double
   }
 
--- Функція для обчислення відстані між двома містами
 distance :: City -> City -> Double
 distance (x1, y1) (x2, y2) = sqrt $ fromIntegral ((x2 - x1)^2 + (y2 - y1)^2)
 
--- Функція для обчислення відстані у маршруті
 routeDistance :: [City] -> Double
 routeDistance route = sum $ zipWith distance route (tail route ++ [head route])
 
--- Функція для створення випадкової особини
 randomIndividual :: [City] -> IO Individual
 randomIndividual cities = do
   shuffled <- shuffle cities
   return shuffled
 
--- Функція для створення випадкової популяції
 randomPopulation :: [City] -> Int -> IO Population
 randomPopulation cities size = sequence $ replicate size (randomIndividual cities)
 
--- Функція для перемішування списку випадковим чином
 shuffle :: [a] -> IO [a]
 shuffle xs = do
   gen <- newStdGen
@@ -49,7 +40,6 @@ shuffle xs = do
                           back = take n xs ++ drop (n + 1) xs
                       in (front, newGen) : randomPerm newGen back
 
--- Функція для обчислення придатності (відстані) для кожної особини
 fitness :: Population -> [(Individual, Double)]
 fitness population = map (\ind -> (ind, routeDistance ind)) population
 
