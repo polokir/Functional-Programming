@@ -1,0 +1,6 @@
+.stack-work/
+ghc-9.4.8-x86_64-apple-darwin/
+dist-newstyle/
+app.save0/
+.idea/
+*~
